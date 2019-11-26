@@ -18,7 +18,8 @@ internal extension CIImage {
     
     #if os(OSX)
     internal func nonInterpolatedImage(withScale scale: Scale = Scale(dx: 1, dy: 1)) -> NSImage? {
-        let rep = NSCIImageRep(ciImage: self)
+        let newImage = self.transformed(by: CGAffineTransform(scaleX: scale.dx, y: scale.dy))
+        let rep = NSCIImageRep(ciImage: newImage)
         let nsImage = NSImage(size: rep.size)
         nsImage.addRepresentation(rep)
         return nsImage
