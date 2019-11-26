@@ -6,7 +6,11 @@
 //  Copyright (c) 2015 Alexander Schuch. All rights reserved.
 //
 
+#if os(OSX)
+import Cocoa
+#else
 import UIKit
+#endif
 
 public extension CIColor {
     
@@ -29,7 +33,11 @@ public extension CIColor {
         var hexValue: CUnsignedLongLong = 0
         
         if scanner.scanHexInt64(&hexValue) {
+            #if os(OSX)
+            let length = rgba.count
+            #else
             let length = rgba.characters.count
+            #endif
             
             switch (length) {
             case 3:

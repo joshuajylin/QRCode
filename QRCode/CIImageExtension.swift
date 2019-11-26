@@ -6,12 +6,24 @@
 //  Copyright © 2015 Alexander Schuch. All rights reserved.
 //
 
-import Foundation
+#if os(OSX)
+import Cocoa
+#else
+import UIKit
+#endif
 
 internal typealias Scale = (dx: CGFloat, dy: CGFloat)
 
 internal extension CIImage {
     
+    #if os(OSX)
+    internal func nonInterpolatedImage(withScale scale: Scale = Scale(dx: 1, dy: 1)) -> NSImage? {
+        let rep = NSCIImageRep(ciImage: self)
+        let nsImage = NSImage(size: rep.size)
+        nsImage.addRepresentation(rep)
+        return nsImage
+    }
+    #else
     /// Creates an `UIImage` with interpolation disabled and scaled given a scale property
     ///
     /// - parameter withScale:  a given scale using to resize the result image
@@ -32,4 +44,5 @@ internal extension CIImage {
         
         return result
     }
+    #endif
 }

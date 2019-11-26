@@ -6,7 +6,11 @@
 //  Copyright (c) 2015 Alexander Schuch. All rights reserved.
 //
 
+#if os(OSX)
+import Cocoa
+#else
 import UIKit
+#endif
 
 public typealias 🔳 = QRCode
 
@@ -69,6 +73,17 @@ public struct QRCode {
     
     // MARK: Generate QRCode
     
+    #if os(OSX)
+    public var image: NSImage? {
+        guard let ciImage = ciImage else { return nil }
+        
+        // Size
+        let ciImageSize = ciImage.extent.size
+        let widthRatio = size.width / ciImageSize.width
+        let heightRatio = size.height / ciImageSize.height
+        return ciImage.nonInterpolatedImage(withScale: Scale(dx: widthRatio, dy: heightRatio))
+    }
+    #else
     /// The QRCode's UIImage representation
     public var image: UIImage? {
         guard let ciImage = ciImage else { return nil }
@@ -77,9 +92,10 @@ public struct QRCode {
         let ciImageSize = ciImage.extent.size
         let widthRatio = size.width / ciImageSize.width
         let heightRatio = size.height / ciImageSize.height
-        
         return ciImage.nonInterpolatedImage(withScale: Scale(dx: widthRatio, dy: heightRatio))
     }
+    #endif
+        
     
     /// The QRCode's CIImage representation
     public var ciImage: CIImage? {
